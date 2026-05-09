@@ -1,0 +1,52 @@
+package com.oualid.CRMSaas.Entity;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name ="customer")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Customer {
+
+    @Id
+    @GeneratedValue
+    @UuidGenerator
+    @Column(name = "id")
+    private UUID id ;
+
+    private  String name ;
+    private  String email ;
+    private  String phone ;
+    private String website ;
+    private  String addres ;
+
+    @CreationTimestamp
+    private LocalDateTime CreatedAt ;
+
+    @UpdateTimestamp
+    private LocalDateTime UpdatedAt ;
+
+    @ManyToOne
+    @JsonIgnore
+    private  User createdBy ;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Opportunity> opportunities ;
+
+
+
+}
