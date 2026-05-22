@@ -1,28 +1,37 @@
 package com.oualid.CRMSaas.Services;
 
-
-import org.springframework.mail.SimpleMailMessage;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
 
-    private  final JavaMailSender javaemailsender ;
+    private final JavaMailSender javaMailSender;
 
-    public  EmailService(JavaMailSender javaMailSender){
-        this.javaemailsender = javaMailSender ;
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
     public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        javaemailsender.send(message);
+            helper.setTo(to);
+            helper.setSubject(subject);
 
-        System.out.println("Email sent to: " + to);
+            // true = HTML activé
+            helper.setText(body, true);
+
+            javaMailSender.send(message);
+
+            System.out.println("Email sent to: " + to);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur envoi email: " + e.getMessage());
+        }
     }
 }

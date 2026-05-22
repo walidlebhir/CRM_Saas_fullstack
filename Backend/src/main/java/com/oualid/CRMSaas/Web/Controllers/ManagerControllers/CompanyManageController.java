@@ -25,7 +25,7 @@ public class CompanyManageController {
         return  this.companyservice.CreateNewCompany(datarequest , manager.getUsername());
     }
 
-    @PatchMapping("/update/company/{id}")
+    @PutMapping("/update/company/{id}")
     public  Company UpdateInfoCompany(@RequestBody CompanyRequestDTO dataRequestupdate , @PathVariable UUID id ){
         return  this.companyservice.updateDataCompany(dataRequestupdate , id);
     }
@@ -40,6 +40,12 @@ public class CompanyManageController {
     @GetMapping("/chek/company")
     public Boolean CHekCompanyExiste(@AuthenticationPrincipal UserDetails userdetail){
         return  this.companyservice.ChekEntrepirseCreate(userdetail.getUsername());
+
+    }
+
+    @PostMapping("/Generate/token")
+    public String generateTokenCompany(@AuthenticationPrincipal UserDetails user_conected ){
+        return  this.companyservice.GenerateTokenCompany(user_conected.getUsername());
 
     }
 

@@ -92,6 +92,7 @@ public class AuthService {
             }
             // mapping
             return  new ChekAuthResponse(
+                    user.getId() ,
                     user.getFirstName()  ,
                     user.getLastName() ,
                     user.getEmail() ,

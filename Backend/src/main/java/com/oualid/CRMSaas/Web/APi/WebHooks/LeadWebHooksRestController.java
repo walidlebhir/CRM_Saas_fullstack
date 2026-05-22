@@ -15,10 +15,11 @@ public class LeadWebHooksRestController {
         this.webhoksservice = webhoksservice ;
     }
 
-    @PostMapping("/leads/{source}")
+    @PostMapping("/leads/{source}/{token}")
     public ResponseEntity<String> WeebHooksLeadSystem(@PathVariable String source ,
-                                                      @RequestBody Object pyload ){
+                                                      @RequestBody Object pyload ,
+                                                      @PathVariable String token ){
 
-        return  this.webhoksservice.ProccesLead(source , pyload);
+        return  this.webhoksservice.ProccesLead(source , pyload , token);
     }
 }

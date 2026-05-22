@@ -2,6 +2,7 @@ package com.oualid.CRMSaas.Entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,6 +46,7 @@ public class Customer {
     private  User createdBy ;
 
     @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
     private List<Opportunity> opportunities ;
 
 

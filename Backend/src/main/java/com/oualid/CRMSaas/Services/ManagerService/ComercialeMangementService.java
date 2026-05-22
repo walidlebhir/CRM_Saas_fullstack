@@ -8,6 +8,8 @@ import com.oualid.CRMSaas.Entity.Enum.RoleUser;
 import com.oualid.CRMSaas.Entity.User;
 import com.oualid.CRMSaas.Exception.UserNotFoundException;
 import com.oualid.CRMSaas.Repository.UserRepository;
+import com.oualid.CRMSaas.Services.EmailService;
+import com.oualid.CRMSaas.Tools.Email_Commande.SendEmailCommand;
 import com.oualid.CRMSaas.Tools.LoggerObserver.EventManager;
 import com.oualid.CRMSaas.Tools.PasswordGenerate_Builder.PasswordBuilder;
 import org.springframework.http.HttpStatus;
@@ -24,13 +26,17 @@ public class ComercialeMangementService {
     private final UserRepository userRepository ;
     private final PasswordEncoder passwordEncoder;
     private final EventManager eventmanager ;
+    private final EmailService emailservice ;
 
     public ComercialeMangementService(UserRepository userrepo
-            , PasswordEncoder passwordencoder   , EventManager eventManager
+                                        , PasswordEncoder passwordencoder
+                                        , EventManager eventManager
+                                        ,EmailService emailservice
                                       ){
         this.userRepository = userrepo ;
         this.passwordEncoder = passwordencoder ;
         this.eventmanager = eventManager ;
+        this.emailservice = emailservice ;
     }
 
 
@@ -46,7 +52,6 @@ public class ComercialeMangementService {
                     .withUppercase(true)
                     .build();
 
-            System.out.println("password generate : "+ generatePassword);
             User new_comerciale = User.builder()
                     .firstName(datacomerciale.firstName())
                     .lastName(datacomerciale.lastName())
@@ -58,6 +63,44 @@ public class ComercialeMangementService {
                     .build();
 
             User user_created = this.userRepository.save(new_comerciale);
+            // envoie Email contient Acoun Customer :
+
+            String subject = "Votre compte CRM SaaS a été créé";
+
+            String body =
+                    "<html>" +
+                            "<body style='font-family: Arial, sans-serif; background-color:#f4f6f9; padding:20px;'>" +
+
+                            "<div style='max-width:600px; margin:auto; background:white; padding:20px; border-radius:10px;'>" +
+
+                            "<h2 style='color:#2c3e50;'>Bienvenue sur CRM SaaS</h2>" +
+
+                            "<p>Bonjour <b>" + datacomerciale.firstName() + "</b>,</p>" +
+
+                            "<p>Votre compte commercial a été créé avec succès.</p>" +
+
+                            "<h3 style='color:#2980b9;'>Vos informations de connexion :</h3>" +
+
+                            "<p><b>Email :</b> " + datacomerciale.email() + "</p>" +
+                            "<p><b>Mot de passe temporaire :</b> <span style='color:red;'>" + generatePassword + "</span></p>" +
+
+                            "<p style='margin-top:20px;'>Nous vous recommandons de changer votre mot de passe après la première connexion.</p>" +
+
+                            "<hr>" +
+                            "<p style='font-size:12px; color:gray;'>L’équipe CRM SaaS</p>" +
+
+                            "</div>" +
+
+                            "</body>" +
+                            "</html>";
+            SendEmailCommand commande = new SendEmailCommand(
+                    this.emailservice ,
+                    datacomerciale.email() ,
+                    subject ,
+                    body
+            );
+
+            commande.execute();
             return  user_created;
 
         }catch(Exception e){
@@ -114,6 +157,7 @@ public class ComercialeMangementService {
         try{
             User comercialeSHow = this.userRepository.findById(id_comerciale).orElseThrow(()->new UserNotFoundException("user not found ")) ;
             return new UserResponseDTO(
+                    comercialeSHow.getId(),
                     comercialeSHow.getFirstName() ,
                     comercialeSHow.getLastName() ,
                     comercialeSHow.getEmail() ,
@@ -140,6 +184,7 @@ public class ComercialeMangementService {
             List<UserResponseDTO> dataDtoResponseMapping = new ArrayList<>();
             for(User user : dataUsersResponse){
                 UserResponseDTO userresponsedto = new UserResponseDTO(
+                        user.getId(),
                        user.getFirstName() ,
                        user.getLastName() ,
                        user.getEmail() ,

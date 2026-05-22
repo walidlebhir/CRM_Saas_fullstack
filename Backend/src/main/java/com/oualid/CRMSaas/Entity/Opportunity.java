@@ -1,6 +1,8 @@
 package com.oualid.CRMSaas.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oualid.CRMSaas.Entity.Enum.OpportunityStage;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,9 +43,11 @@ public class Opportunity {
     private  LocalDateTime UpdatedAt ;
 
     @ManyToOne
+    @JsonBackReference
     private Customer customer;
 
     @ManyToOne
+    @JsonIgnore
     private User assignedTo;
 
     @OneToMany(mappedBy = "opportunity")

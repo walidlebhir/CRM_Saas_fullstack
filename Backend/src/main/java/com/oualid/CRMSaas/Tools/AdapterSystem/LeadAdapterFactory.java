@@ -4,7 +4,7 @@ public class LeadAdapterFactory {
     public static  LeadAdapter getAdapter(String source ){
 
         return  switch(source){
-            case "SYSTEM_A" -> new SystemEntreprise();
+            case "Shopyfiy" -> new Shopyfiy();
             case "SYSTEM_B" -> new SystemEntreprise() ;
             default -> throw new IllegalArgumentException("Unknown source");
         };

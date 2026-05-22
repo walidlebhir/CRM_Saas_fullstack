@@ -47,6 +47,10 @@ public class Company {
     @Column(name = "webSite")
     private  String webSite ;
 
+    @Column(name = "tokenwebhooks")
+    private String tokenWebHooks;
+
+
     @CreationTimestamp
     @Column(name = "createdat")
     private LocalDateTime CreatedAt ;

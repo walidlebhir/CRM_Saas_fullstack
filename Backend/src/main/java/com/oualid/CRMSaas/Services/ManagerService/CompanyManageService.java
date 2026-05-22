@@ -6,10 +6,12 @@ import com.oualid.CRMSaas.Entity.AuditLogger;
 import com.oualid.CRMSaas.Entity.Company;
 import com.oualid.CRMSaas.Entity.User;
 import com.oualid.CRMSaas.Exception.CompanyNotFound;
+import com.oualid.CRMSaas.Exception.ResourceNotFoundException;
 import com.oualid.CRMSaas.Exception.UserNotFoundException;
 import com.oualid.CRMSaas.Repository.CompanyRepository;
 import com.oualid.CRMSaas.Repository.UserRepository;
 import com.oualid.CRMSaas.Tools.LoggerObserver.EventManager;
+import com.oualid.CRMSaas.Tools.Token.TokenGenrator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,6 +128,26 @@ public class CompanyManageService {
         }catch(Exception e){
             System.out.println("[LOG] :  "+e.getMessage()) ;
             throw  new RuntimeException("problemme dans le service ");
+        }
+
+    }
+
+    public String GenerateTokenCompany(String user_name_manager ){
+        try{
+            User user_manager = this.userrepo.findByEmail(user_name_manager);
+            if(user_manager == null){
+                throw new UserNotFoundException("manager not found ") ;
+            }
+
+            String token_generate = TokenGenrator.tokengerator();
+            Company company = this.companyrepository.findById(user_manager.getCompany().getId()).orElseThrow(()->new ResourceNotFoundException("company dont existe "));
+            company.setTokenWebHooks(token_generate);
+            this.companyrepository.save(company) ;
+            return token_generate ;
+        }catch(Exception e){
+            // debug
+            System.out.println("problemme dans le service ") ;
+            throw new RuntimeException("problemme dans le service ");
         }
 
     }

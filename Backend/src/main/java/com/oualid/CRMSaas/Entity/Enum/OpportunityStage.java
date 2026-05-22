@@ -5,6 +5,6 @@ public enum OpportunityStage {
     QUALIFICATION,
     PROPOSAL,
     NEGOTIATION,
-    WON,
-    LOST
+    WON, // vent gane--> efectue
+    LOST // vent verdue ->> n'efectue pas
 }
