@@ -1,6 +1,7 @@
 package com.oualid.CRMSaas.Tools.AdapterSystem;
 
 import com.oualid.CRMSaas.DTO.LeadDTO;
+import com.oualid.CRMSaas.Entity.Enum.LeadSource;
 
 import java.util.Map;
 
@@ -14,7 +15,9 @@ public class Shopyfiy implements LeadAdapter {
                 (String) data.get("firstname") ,
                 (String) data.get("lastname"),
                 (String) data.get("email"),
-                (String)  data.get("phone")
+                (String)  data.get("phone"),
+                (LeadSource) data.get("source"),
+                null
         );
 
         return lead;

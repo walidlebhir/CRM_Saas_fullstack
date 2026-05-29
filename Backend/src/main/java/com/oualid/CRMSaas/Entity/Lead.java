@@ -3,6 +3,7 @@ package com.oualid.CRMSaas.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.oualid.CRMSaas.Entity.Enum.LeadSource;
 import com.oualid.CRMSaas.Entity.Enum.LeadStatus;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Lead {
 
     @Id
@@ -42,10 +44,10 @@ public class Lead {
     private LeadStatus status ;
 
     @CreationTimestamp
-    private LocalDateTime CretaedAt ;
+    private LocalDateTime createdAt ;
 
     @UpdateTimestamp
-    private  LocalDateTime UpdatedAt ;
+    private  LocalDateTime updatedAt ;
 
     @ManyToOne
     @JsonBackReference

@@ -1,18 +1,20 @@
 package com.oualid.CRMSaas.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name ="notes")
+@Table(name = "note")
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Note {
     @Id @GeneratedValue
     private Long id;
@@ -23,6 +25,7 @@ public class Note {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"notes", "hibernateLazyInitializer", "handler"})
     private Activity activity;
 
 }

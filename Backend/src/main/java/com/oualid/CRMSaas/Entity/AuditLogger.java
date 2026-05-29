@@ -24,10 +24,10 @@ public class AuditLogger {
     private String log ;
 
     @CreationTimestamp
-    private LocalDateTime CreatedAt ;
+    private LocalDateTime createdAt ;
 
     @UpdateTimestamp
-    private  LocalDateTime UpdatedAt ;
+    private  LocalDateTime updatedAt ;
 
 
 }

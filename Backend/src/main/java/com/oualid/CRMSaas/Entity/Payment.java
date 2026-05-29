@@ -1,28 +1,22 @@
 package com.oualid.CRMSaas.Entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 @Entity
 @Table(name = "payment")
-@Service
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Payment {
-
 
     @Id
     @GeneratedValue
@@ -30,17 +24,23 @@ public class Payment {
 
     private Double amount;
 
-    private String method;   // CARD, PAYPAL...
+    private String method;
 
-    private String status;   // PENDING, SUCCESS, FAILED
+    private String status;
 
     private String transactionId;
 
-    private UUID userId;
+    private String cardHolder;
 
+    private String cardLastFour;
+
+    private Integer month;
+
+    private Integer year;
+
+    private UUID companyId;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 
 }

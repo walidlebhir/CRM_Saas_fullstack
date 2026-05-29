@@ -1,8 +1,8 @@
 package com.oualid.CRMSaas.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.oualid.CRMSaas.Entity.Enum.OpportunityStage;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Opportunity {
 
     @Id
@@ -37,13 +38,13 @@ public class Opportunity {
     private  String description ;
 
     @CreationTimestamp
-    private LocalDateTime CreatedAt ;
+    private LocalDateTime createdAt ;
 
     @UpdateTimestamp
-    private  LocalDateTime UpdatedAt ;
+    private  LocalDateTime updatedAt ;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnoreProperties({"opportunities", "hibernateLazyInitializer", "handler"})
     private Customer customer;
 
     @ManyToOne
@@ -51,9 +52,11 @@ public class Opportunity {
     private User assignedTo;
 
     @OneToMany(mappedBy = "opportunity")
+    @JsonIgnore
     private List<Activity> activities;
 
     @OneToMany(mappedBy = "opportunity")
+    @JsonIgnore
     private List<Task> tasks;
 
 

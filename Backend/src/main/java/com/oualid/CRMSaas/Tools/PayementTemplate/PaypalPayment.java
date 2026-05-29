@@ -18,7 +18,7 @@ public class PaypalPayment extends  PaymentTemplate {
     protected boolean Execute(PayementRequest datarequest) {
         System.out.println("Paypal processing...");
 
-        return datarequest.amout() != null && datarequest.amout() > 0;
+        return datarequest.amount() != null && datarequest.amount() > 0;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.oualid.CRMSaas.Web.Controllers.ManagerControllers;
 
+import com.oualid.CRMSaas.DTO.CompanyListResponse;
 import com.oualid.CRMSaas.DTO.CompanyRequestDTO;
 import com.oualid.CRMSaas.Entity.Company;
 import com.oualid.CRMSaas.Services.ManagerService.CompanyManageService;
@@ -7,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,6 +43,11 @@ public class CompanyManageController {
     public Boolean CHekCompanyExiste(@AuthenticationPrincipal UserDetails userdetail){
         return  this.companyservice.ChekEntrepirseCreate(userdetail.getUsername());
 
+    }
+
+    @GetMapping("/companies/all")
+    public List<CompanyListResponse> getAllCompanies() {
+        return this.companyservice.getAllCompanies();
     }
 
     @PostMapping("/Generate/token")

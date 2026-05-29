@@ -1,6 +1,7 @@
 package com.oualid.CRMSaas.Tools.AdapterSystem;
 
 import com.oualid.CRMSaas.DTO.LeadDTO;
+import com.oualid.CRMSaas.Entity.Enum.LeadSource;
 
 import java.util.Map;
 
@@ -13,7 +14,9 @@ public class SystemEntreprise implements LeadAdapter {
                 (String) data.get("prenom") ,
                 (String) data.get("nom") ,
                 (String)  data.get("email") ,
-                (String) data.get("phonenumber")
+                (String) data.get("phonenumber"),
+                (LeadSource)  data.get("source"),
+                null
         );
 
 

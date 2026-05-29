@@ -1,7 +1,7 @@
 package com.oualid.CRMSaas.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.oualid.CRMSaas.Entity.Enum.ActivityType;
 import com.oualid.CRMSaas.Entity.Enum.RoleUser;
@@ -24,6 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -43,9 +44,9 @@ public class User {
 
 
     @CreationTimestamp
-    private LocalDateTime CreatedAt ;
+    private LocalDateTime createdAt ;
     @UpdateTimestamp
-    private  LocalDateTime UpdatedAt ;
+    private  LocalDateTime updatedAt ;
 
     @Enumerated(EnumType.STRING)
     private RoleUser role ;
@@ -56,18 +57,29 @@ public class User {
     private  Company company ;
 
     @OneToMany(mappedBy = "assignedTo")
+    @JsonIgnore
     private List<Lead> leads ;
 
     @OneToMany(mappedBy = "createdBy")
+    @JsonIgnore
     private List<Customer> customers ;
 
     @OneToMany(mappedBy = "assignedTo")
+    @JsonIgnore
     private List<Opportunity> opportunities ;
 
     @OneToMany(mappedBy = "assignedTo")
+    @JsonIgnore
     private List<Activity> activities ;
 
+    @OneToMany(mappedBy = "assignedto")
+    @JsonIgnore
+    private List<Task> tasks ;
 
+    // publicite
+    @OneToMany(mappedBy = "assignedToo")
+    @JsonIgnore
+    private List<Publicite> publicites ;
 
 
 }

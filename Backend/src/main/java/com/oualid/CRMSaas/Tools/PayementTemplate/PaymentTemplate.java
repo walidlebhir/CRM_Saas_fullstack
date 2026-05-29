@@ -20,11 +20,15 @@ public abstract class PaymentTemplate {
         boolean isCorrectForm = Execute(datapayement);
 
         Payment newPayment = Payment.builder()
-                .amount(datapayement.amout())
+                .amount(datapayement.amount())
                 .transactionId(datapayement.transactionId())
                 .method(datapayement.method())
                 .status(datapayement.status())
-                .userId(datapayement.user_id())
+                .companyId(datapayement.companyId())
+                .cardHolder(datapayement.cardHolder())
+                .cardLastFour(maskCard(datapayement.cardNumber()))
+                .month(datapayement.month())
+                .year(datapayement.year())
                 .build();
 
         return this.paymentRepository.save(newPayment);
@@ -36,5 +40,11 @@ public abstract class PaymentTemplate {
     // ajouter notification
     protected void notifyClient(Payment payment) {
         System.out.println("Notification sent: " + payment.getStatus());
+    }
+
+    private String maskCard(String cardNumber) {
+        if (cardNumber == null || cardNumber.length() < 4) return null;
+        String lastFour = cardNumber.substring(cardNumber.length() - 4);
+        return "****" + lastFour;
     }
 }

@@ -5,13 +5,17 @@ import com.oualid.CRMSaas.DTO.EnumStatusLeadResponse;
 import com.oualid.CRMSaas.DTO.LeadDTO;
 import com.oualid.CRMSaas.DTO.StatusRequest;
 import com.oualid.CRMSaas.Entity.Customer;
+import com.oualid.CRMSaas.Entity.Enum.LeadSource;
 import com.oualid.CRMSaas.Entity.Enum.LeadStatus;
 import com.oualid.CRMSaas.Entity.Lead;
 import com.oualid.CRMSaas.Services.ComercialeService.LeadsManagementService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +44,9 @@ public class LeadController {
 
     }
 
-    @PatchMapping("/change/status/{id_lead}")
+    @PutMapping("/change/status/{id_lead}")
     public ResponseEntity<String> ChangeStatusLead(@PathVariable UUID id_lead , @RequestBody StatusRequest statusRequest ){
-        return  this.ChangeStatusLead(id_lead , statusRequest);
+        return  this.leadmanageservice.ChangeStatusLead(id_lead , statusRequest);
 
     }
 
@@ -60,7 +64,15 @@ public class LeadController {
     @GetMapping("/get/all")
     public  List<Lead> getALlLead(@AuthenticationPrincipal UserDetails userdetails){
         return  this.leadmanageservice.getAllLeads(userdetails.getUsername());
+    }
 
+    @GetMapping("/get/all/page")
+    public Page<Lead> getLeadsPaginated(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+        return leadmanageservice.getLeadsPaginated(userDetails.getUsername(), page, size);
     }
 
     @GetMapping("/show/lead/{id}")
@@ -68,5 +80,33 @@ public class LeadController {
         return  this.leadmanageservice.ShowLead(id);
     }
 
+    @GetMapping("/get/all/source/lead")
+    public List<LeadSource> getAllsourceLead(){
+        return  this.leadmanageservice.getAllLeadSource();
+    }
+
+
+    // modefication Lead data :
+
+    @PatchMapping("/update/lead/{id_lead}")
+    public Lead updateLead(
+            @PathVariable UUID id_lead ,
+            @RequestBody LeadDTO datalead
+    ){
+        return  this.leadmanageservice.UpdateLead(id_lead , datalead );
+    }
+
+    @GetMapping("/get/status/lead")
+    public List<LeadStatus> getLeadStatus(){
+        return  this.leadmanageservice.getAllLeadStatus() ;
+    }
+
+    @PostMapping(value = "/import/lead/csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public List<Lead> importLeadsCsv(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("file") MultipartFile file
+    ) {
+        return leadmanageservice.importLeadsFromCsv(userDetails.getUsername(), file);
+    }
 
 }

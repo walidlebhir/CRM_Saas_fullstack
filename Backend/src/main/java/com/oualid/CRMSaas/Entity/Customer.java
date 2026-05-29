@@ -2,7 +2,7 @@ package com.oualid.CRMSaas.Entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Customer {
 
     @Id
@@ -36,17 +37,17 @@ public class Customer {
     private  String addres ;
 
     @CreationTimestamp
-    private LocalDateTime CreatedAt ;
+    private LocalDateTime createdAt ;
 
     @UpdateTimestamp
-    private LocalDateTime UpdatedAt ;
+    private LocalDateTime updatedAt ;
 
     @ManyToOne
     @JsonIgnore
     private  User createdBy ;
 
     @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Opportunity> opportunities ;
 
 

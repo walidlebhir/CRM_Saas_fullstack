@@ -1,16 +1,14 @@
 package com.oualid.CRMSaas.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Company {
 
     @Id
@@ -53,21 +52,22 @@ public class Company {
 
     @CreationTimestamp
     @Column(name = "createdat")
-    private LocalDateTime CreatedAt ;
+    private LocalDateTime createdAt ;
 
     @UpdateTimestamp
     @Column(name = "updatedat")
-    private  LocalDateTime UpdatedAt ;
+    private  LocalDateTime updatedAt ;
 
     @OneToMany(mappedBy = "company")
     @JsonIgnore
     private List<User> users ;
 
     @OneToMany(mappedBy = "company")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Lead> leads ;
 
     @OneToMany(mappedBy = "company")
+    @JsonIgnore
     private  List<Task> tasks ;
 
 

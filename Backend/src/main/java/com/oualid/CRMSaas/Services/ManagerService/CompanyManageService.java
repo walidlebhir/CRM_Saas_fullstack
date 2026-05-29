@@ -1,6 +1,7 @@
 package com.oualid.CRMSaas.Services.ManagerService;
 
 
+import com.oualid.CRMSaas.DTO.CompanyListResponse;
 import com.oualid.CRMSaas.DTO.CompanyRequestDTO;
 import com.oualid.CRMSaas.Entity.AuditLogger;
 import com.oualid.CRMSaas.Entity.Company;
@@ -9,12 +10,14 @@ import com.oualid.CRMSaas.Exception.CompanyNotFound;
 import com.oualid.CRMSaas.Exception.ResourceNotFoundException;
 import com.oualid.CRMSaas.Exception.UserNotFoundException;
 import com.oualid.CRMSaas.Repository.CompanyRepository;
+import com.oualid.CRMSaas.Repository.LeadRepository;
 import com.oualid.CRMSaas.Repository.UserRepository;
 import com.oualid.CRMSaas.Tools.LoggerObserver.EventManager;
 import com.oualid.CRMSaas.Tools.Token.TokenGenrator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,14 +26,17 @@ public class CompanyManageService {
 
     private CompanyRepository companyrepository ;
     private UserRepository userrepo ;
+    private LeadRepository leadrepo ;
     private EventManager eventmangerAudit ;
 
 
     public  CompanyManageService(CompanyRepository companyrepository ,
                                  UserRepository userrepo,
+                                 LeadRepository leadrepo,
                                  EventManager eventaudit ){
         this.companyrepository = companyrepository ;
         this.userrepo = userrepo ;
+        this.leadrepo = leadrepo ;
         this.eventmangerAudit = eventaudit ;
     }
 
@@ -130,6 +136,28 @@ public class CompanyManageService {
             throw  new RuntimeException("problemme dans le service ");
         }
 
+    }
+
+    public List<CompanyListResponse> getAllCompanies() {
+        List<Company> companies = this.companyrepository.findAll();
+        return companies.stream().map(company -> {
+            long totalUsers = company.getUsers() != null ? company.getUsers().size() : 0;
+            long totalLeads = this.leadrepo.countByCompany(company);
+            return new CompanyListResponse(
+                company.getId(),
+                company.getName(),
+                company.getIndustrie(),
+                company.getEmail(),
+                company.getPhone(),
+                company.getAddress(),
+                company.getWebSite(),
+                company.getTokenWebHooks() != null && !company.getTokenWebHooks().isEmpty(),
+                company.getCreatedAt(),
+                company.getUpdatedAt(),
+                totalUsers,
+                totalLeads
+            );
+        }).toList();
     }
 
     public String GenerateTokenCompany(String user_name_manager ){
